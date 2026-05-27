@@ -1,8 +1,4 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@alpic-ai/ui/components/tooltip";
+import { Check } from "lucide-react";
 
 export default function Progress({
   steps,
@@ -14,26 +10,51 @@ export default function Progress({
   onSelect: (index: number) => void;
 }) {
   return (
-    <div className="flex gap-1.5">
-      {steps.map((label, i) => (
-        <Tooltip key={label}>
-          <TooltipTrigger asChild>
+    <ol className="flex items-center justify-between gap-1.5">
+      {steps.map((label, i) => {
+        const done = i < current;
+        const active = i === current;
+        const canJump = i <= current;
+        return (
+          <li key={label} className="flex flex-1 items-center gap-2">
             <button
               type="button"
-              onClick={() => onSelect(i)}
-              className={`relative h-1.5 flex-1 rounded-full transition-all before:absolute before:-inset-y-5 before:inset-x-0 before:content-[''] [@media(hover:hover)]:hover:opacity-80 ${
-                i < current
-                  ? "bg-p4-500"
-                  : i === current
-                    ? "bg-gradient-to-r from-p4-500 to-p4-300 shadow-[0_0_10px_rgba(123,77,181,0.6)]"
-                    : "bg-muted"
+              onClick={() => canJump && onSelect(i)}
+              disabled={!canJump}
+              aria-current={active ? "step" : undefined}
+              className={`group flex flex-1 items-center gap-2 rounded-full px-2 py-1 text-left transition-colors ${
+                canJump ? "cursor-pointer hover:bg-p4-50 dark:hover:bg-p4-800/30" : "cursor-not-allowed"
               }`}
-              aria-label={label}
-            />
-          </TooltipTrigger>
-          <TooltipContent>{label}</TooltipContent>
-        </Tooltip>
-      ))}
-    </div>
+            >
+              <span
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold transition-all ${
+                  done
+                    ? "bg-p4-700 text-white"
+                    : active
+                      ? "bg-p4-700 text-white shadow-md shadow-p4-500/40 ring-4 ring-p4-200 dark:ring-p4-700/40"
+                      : "border border-border bg-card text-muted-foreground"
+                }`}
+              >
+                {done ? <Check className="h-3 w-3" strokeWidth={3} /> : i + 1}
+              </span>
+              <span
+                className={`hidden truncate text-[11px] font-medium sm:inline ${
+                  active ? "text-foreground" : "text-muted-foreground"
+                }`}
+              >
+                {label}
+              </span>
+            </button>
+            {i < steps.length - 1 && (
+              <span
+                className={`h-px w-3 shrink-0 transition-colors sm:w-5 ${
+                  done ? "bg-p4-500" : "bg-border"
+                }`}
+              />
+            )}
+          </li>
+        );
+      })}
+    </ol>
   );
 }
