@@ -1,8 +1,8 @@
 node_modules/
 dist/
 .env*
-.DS_store
 .DS_Store
 *.tsbuildinfo
 .skybridge/
 .playwright-mcp/
+Perforce-selected-assets/

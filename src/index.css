@@ -9,26 +9,26 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --color-primary: #4e2a84;
+  --color-primary: #4c00ff;
   --color-primary-foreground: #ffffff;
-  --color-primary-hover: #5e3499;
+  --color-primary-hover: #3a00cc;
   --color-primary-hover-foreground: #ffffff;
 
-  --color-ring: #7b4db5;
-  --color-link: #5e3499;
-  --color-tertiary: #4e2a84;
-  --color-cta-accent: #c4a5ff;
+  --color-ring: #6d33ff;
+  --color-link: #3a00cc;
+  --color-tertiary: #4c00ff;
+  --color-cta-accent: #a380ff;
 
-  --color-p4-50: #f6f1ff;
-  --color-p4-100: #eadfff;
-  --color-p4-200: #d6bdff;
-  --color-p4-300: #b591ff;
-  --color-p4-400: #9466e0;
-  --color-p4-500: #7b4db5;
-  --color-p4-600: #5e3499;
-  --color-p4-700: #4e2a84;
-  --color-p4-800: #2d1f4a;
-  --color-p4-900: #1a1230;
+  --color-p4-50: #f1ecff;
+  --color-p4-100: #e3d9ff;
+  --color-p4-200: #c4b3ff;
+  --color-p4-300: #a380ff;
+  --color-p4-400: #7d4dff;
+  --color-p4-500: #6d33ff;
+  --color-p4-600: #5c1aff;
+  --color-p4-700: #4c00ff;
+  --color-p4-800: #3a00cc;
+  --color-p4-900: #1f006e;
 
   --animate-float: float 4s ease-in-out infinite;
   --animate-aurora: aurora 18s ease-in-out infinite;
@@ -39,23 +39,23 @@
 
 @layer base {
   :root {
-    --color-background: #faf7ff;
+    --color-background: #f9f7ff;
     --color-card: #ffffff;
-    --color-border: #e4d8f7;
-    --color-muted: #f1eafd;
-    --color-muted-foreground: #4a3a6a;
+    --color-border: #e0d6ff;
+    --color-muted: #ece4ff;
+    --color-muted-foreground: #3a2a7a;
   }
 
   .dark {
-    --color-background: #14092a;
+    --color-background: #0a0420;
     --color-foreground: #f4ecff;
-    --color-card: #1d1140;
-    --color-border: #3b256e;
-    --color-muted: #251650;
+    --color-card: #160b3a;
+    --color-border: #2a1670;
+    --color-muted: #1c1050;
     --color-muted-foreground: #c4b6e0;
-    --color-popover: #1d1140;
+    --color-popover: #160b3a;
     --color-popover-foreground: #f4ecff;
-    --color-sidebar: #14092a;
+    --color-sidebar: #0a0420;
   }
 }
 
@@ -102,9 +102,9 @@
 @keyframes pulse-slow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(123, 77, 181, 0.45);
+    box-shadow: 0 0 0 0 rgba(76, 0, 255, 0.45);
   }
   50% {
-    box-shadow: 0 0 0 14px rgba(123, 77, 181, 0);
+    box-shadow: 0 0 0 14px rgba(76, 0, 255, 0);
   }
 }
