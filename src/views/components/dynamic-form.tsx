@@ -10,6 +10,7 @@ interface Props {
   onChange: (key: string, value: string | number) => void;
   onTailor: () => void;
   isTailoring?: boolean;
+  canTailor: boolean;
 }
 
 export default function DynamicForm({
@@ -19,6 +20,7 @@ export default function DynamicForm({
   onChange,
   onTailor,
   isTailoring,
+  canTailor,
 }: Props) {
   const renderField = (field: FormField, aiSuggested = false) => {
     if (field.type === "slider") {
@@ -48,55 +50,43 @@ export default function DynamicForm({
   };
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="grid gap-3 sm:grid-cols-2">
+    <div className="flex flex-col gap-2.5">
+      <div className="flex items-center justify-between">
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Form details
+        </h4>
+        <button
+          type="button"
+          onClick={onTailor}
+          disabled={isTailoring || !canTailor}
+          className="inline-flex items-center gap-1 rounded-full border border-p4-300/70 bg-p4-50 px-2.5 py-1 text-[11px] font-medium text-p4-700 transition-colors hover:bg-p4-100 disabled:opacity-50 dark:bg-p4-800/40 dark:text-p4-100 dark:hover:bg-p4-700/50"
+          title="Ask AI to add 1-2 form fields tailored to your idea"
+        >
+          <Sparkles className={`h-3 w-3 ${isTailoring ? "animate-pulse" : ""}`} />
+          {isTailoring ? "Adding fields…" : extraFields.length > 0 ? "Re-tailor" : "+ AI fields"}
+        </button>
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-3">
         {baseFields.map((f) => renderField(f))}
       </div>
 
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-p4-500" />
-            <h4 className="text-sm font-semibold text-foreground">
-              AI-tailored signal
-            </h4>
-            <span className="text-xs text-muted-foreground">
-              ({extraFields.length} field{extraFields.length === 1 ? "" : "s"})
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={onTailor}
-            disabled={isTailoring}
-            className="inline-flex items-center gap-1.5 rounded-full border border-p4-300/70 bg-p4-50 px-3 py-1.5 text-xs font-medium text-p4-700 transition-colors hover:bg-p4-100 disabled:opacity-50 dark:bg-p4-700/30 dark:text-p4-100 dark:hover:bg-p4-700/50"
-          >
-            <Sparkles className={`h-3.5 w-3.5 ${isTailoring ? "animate-pulse" : ""}`} />
-            {isTailoring ? "Asking AI…" : "Tailor form to my requirement"}
-          </button>
+      {extraFields.length > 0 && (
+        <div className="grid gap-2 animate-fade-in sm:grid-cols-3">
+          {extraFields.map((f) => renderField(f, true))}
         </div>
+      )}
 
-        {extraFields.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-p4-300/50 bg-p4-50/40 p-4 text-xs text-muted-foreground dark:bg-p4-700/10">
-            Claude will pick 1–2 extra slider or dropdown fields specific to your requirement (e.g.
-            <em> expected scale</em>, <em>customer tier</em>, <em>integration target</em>).
-          </div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 animate-fade-in">
-            {extraFields.map((f) => renderField(f, true))}
-          </div>
-        )}
-
-        {isTailoring && extraFields.length === 0 && (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[0, 1].map((i) => (
-              <div
-                key={i}
-                className="h-24 rounded-xl border border-border/40 bg-gradient-to-r from-muted via-p4-100/50 to-muted bg-[length:200%_100%] animate-shimmer"
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      {isTailoring && extraFields.length === 0 && (
+        <div className="grid gap-2 sm:grid-cols-3">
+          {[0, 1].map((i) => (
+            <div
+              key={i}
+              className="h-20 rounded-xl border border-border/40 bg-gradient-to-r from-muted via-p4-100/50 to-muted bg-[length:200%_100%] animate-shimmer"
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
