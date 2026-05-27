@@ -22,6 +22,10 @@ import RequirementInput, {
 import DynamicForm from "./components/dynamic-form.js";
 import PromptPreview from "./components/prompt-preview.js";
 import SubmitButton from "./components/submit-button.js";
+import CustomerInfo, {
+  isCustomerValid,
+  type CustomerDetails,
+} from "./components/customer-info.js";
 
 const PRODUCTS = PRODUCT_VIEWS;
 const STEPS = ["Product", "Describe", "Form", "Submit"] as const;
@@ -32,6 +36,7 @@ type ViewState = {
   oneLiner: string | null;
   structured: StructuredRequirement | null;
   formValues: Record<string, string | number>;
+  customer: CustomerDetails | null;
   [key: string]: unknown;
 };
 
@@ -41,7 +46,17 @@ const initialState: ViewState = {
   oneLiner: null,
   structured: null,
   formValues: {},
+  customer: null,
 };
+
+const VALID_PRODUCT_SET = new Set<string>([
+  "puppet-cloud-ops",
+  "puppet-enterprise",
+  "helix-core",
+  "perfecto",
+  "blazemeter",
+  "delphix",
+]);
 
 export default function FeatureRequest() {
   const { theme } = useLayout();
@@ -50,10 +65,16 @@ export default function FeatureRequest() {
 
   const [state, setState] = useViewState<ViewState>(initialState);
   const step = state.step ?? 0;
-  const userProduct = (state.userProduct ?? null) as ProductId | null;
+  const rawProduct = state.userProduct ?? null;
+  const userProduct = (
+    typeof rawProduct === "string" && VALID_PRODUCT_SET.has(rawProduct)
+      ? rawProduct
+      : null
+  ) as ProductId | null;
   const userOneLiner = (state.oneLiner ?? null) as string | null;
   const structuredFromState = (state.structured ?? null) as StructuredRequirement | null;
   const formValues = (state.formValues ?? {}) as Record<string, string | number>;
+  const customer = (state.customer ?? { name: "", email: "" }) as CustomerDetails;
 
   const autoDetected = (input?.product ?? null) as ProductId | null;
   const llmRequirement = input?.requirement ?? "";
@@ -111,6 +132,10 @@ export default function FeatureRequest() {
     setState((p) => ({ ...p, structured: next }));
   const onChangeFormValue = (key: string, value: string | number) =>
     setState((p) => ({ ...p, formValues: { ...p.formValues, [key]: value } }));
+  const onChangeCustomer = (next: CustomerDetails) =>
+    setState((p) => ({ ...p, customer: next }));
+
+  const customerValid = isCustomerValid(customer);
 
   const finalPrompt = useMemo(() => {
     if (!product) return "";
@@ -293,18 +318,27 @@ export default function FeatureRequest() {
               <div>
                 <h2 className="text-base font-semibold text-foreground">Review & submit</h2>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  This goes to{" "}
+                  This opens{" "}
                   <code className="rounded bg-muted px-1 py-px font-mono text-[11px]">
-                    localhost:3001/submit-request
+                    localhost:3000/submit-request
                   </code>{" "}
-                  as a prompt.
+                  with your draft, product, and contact info as query params.
                 </p>
               </div>
+              <CustomerInfo value={customer} onChange={onChangeCustomer} />
               <PromptPreview prompt={finalPrompt} />
               <SubmitButton
                 prompt={finalPrompt}
-                disabled={!selectedProduct || !oneLiner.trim()}
+                product={selectedProduct}
+                customerName={customer.name}
+                customerEmail={customer.email}
+                disabled={!selectedProduct || !oneLiner.trim() || !customerValid}
               />
+              {!customerValid && (
+                <p className="text-center text-[11px] text-muted-foreground">
+                  Add your name and a valid work email above to enable submit.
+                </p>
+              )}
             </div>
           </div>
 

@@ -3,21 +3,36 @@ import { useOpenExternal } from "skybridge/web";
 import { ArrowUpRight } from "lucide-react";
 import perforceMarkWhite from "@/views/assets/brand/logo-perforce-icon-circle-white.svg";
 
-const SUBMIT_BASE = "http://localhost:3001/submit-request";
+const SUBMIT_BASE = "http://localhost:3000/submit-request";
 
 interface Props {
   prompt: string;
+  product: string | null;
+  customerName: string;
+  customerEmail: string;
   disabled?: boolean;
 }
 
-export default function SubmitButton({ prompt, disabled }: Props) {
+export default function SubmitButton({
+  prompt,
+  product,
+  customerName,
+  customerEmail,
+  disabled,
+}: Props) {
   const openExternal = useOpenExternal();
   const [sending, setSending] = useState(false);
 
   const submit = async () => {
-    if (disabled || sending) return;
+    if (disabled || sending || !product) return;
     setSending(true);
-    const url = `${SUBMIT_BASE}?prompt=${encodeURIComponent(prompt)}`;
+    const params = new URLSearchParams({
+      prompt,
+      product,
+      customerName: customerName.trim(),
+      customerEmail: customerEmail.trim(),
+    });
+    const url = `${SUBMIT_BASE}?${params.toString()}`;
     try {
       await openExternal(url);
     } catch (err) {

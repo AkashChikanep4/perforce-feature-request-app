@@ -58,7 +58,7 @@ const server = new McpServer(
     name: "feature-request",
     title: "Open Perforce Feature Request console",
     description:
-      "Open the Perforce Feature Request console — an interactive read-only UI that helps the user draft, refine, and review a feature request for one of the Perforce products (Puppet, Puppet Cloud, Delphix, Helix, Perfecto). The tool itself does not save, send, or transmit anything; it simply renders the console with the supplied draft data. The user remains in control and submits the request themselves from inside the console. Pass `product` if you can infer it from the user's message, `requirement` with the user's described feature, and optionally `extraFields` with 1–2 AI-tailored slider or dropdown fields that gather extra signal about the request (e.g. expected scale, customer tier, integration target). Choose slider ranges and dropdown options that are specific and useful for the described requirement.",
+      "Open the Perforce Feature Request console — an interactive read-only UI that helps the user draft, refine, and review a feature request for one of the Perforce products. Valid product ids: puppet-cloud-ops (Puppet Cloud Ops), puppet-enterprise (Puppet Enterprise), helix-core (Helix Core / P4), perfecto (Perfecto), blazemeter (BlazeMeter), delphix (Delphix). The tool itself does not save, send, or transmit anything; it simply renders the console with the supplied draft data. The user remains in control and submits the request themselves from inside the console. Pass `product` if you can infer it from the user's message, `requirement` with the user's described feature, and optionally `extraFields` with 1–2 AI-tailored slider or dropdown fields that gather extra signal about the request (e.g. expected scale, customer tier, integration target). Choose slider ranges and dropdown options that are specific and useful for the described requirement.",
     inputSchema: {
       product: z.enum(PRODUCT_IDS).optional().describe("Auto-detected Perforce product."),
       requirement: z.string().optional().describe("The user's feature request in their own words."),
@@ -103,7 +103,7 @@ const server = new McpServer(
           "https://fonts.gstatic.com",
         ],
         connectDomains: [PUBLIC_BASE_URL],
-        redirectDomains: ["http://localhost:3001"],
+        redirectDomains: ["http://localhost:3000"],
       },
     },
   },

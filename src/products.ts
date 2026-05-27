@@ -1,9 +1,10 @@
 export const PRODUCT_IDS = [
-  "puppet",
-  "puppet-cloud",
-  "delphix",
-  "helix",
+  "puppet-cloud-ops",
+  "puppet-enterprise",
+  "helix-core",
   "perfecto",
+  "blazemeter",
+  "delphix",
 ] as const;
 
 export type ProductId = (typeof PRODUCT_IDS)[number];
@@ -16,35 +17,41 @@ export interface ProductCore {
 }
 
 export const PRODUCTS: Record<ProductId, ProductCore> = {
-  puppet: {
-    id: "puppet",
-    name: "Puppet",
+  "puppet-cloud-ops": {
+    id: "puppet-cloud-ops",
+    name: "Puppet Cloud Ops",
+    tagline: "Cloud-native infra ops",
+    components: ["Operator Console", "Edge Connector", "Policy Engine", "Reporting", "Identity"],
+  },
+  "puppet-enterprise": {
+    id: "puppet-enterprise",
+    name: "Puppet Enterprise",
     tagline: "Infrastructure automation",
     components: ["Agent", "Server", "PuppetDB", "Bolt", "Forge", "Console UI"],
   },
-  "puppet-cloud": {
-    id: "puppet-cloud",
-    name: "Puppet Cloud",
-    tagline: "SaaS configuration management",
-    components: ["Workspace", "Edge Connector", "Policy Engine", "Reporting", "Identity"],
-  },
-  delphix: {
-    id: "delphix",
-    name: "Delphix",
-    tagline: "Data masking & virtualization",
-    components: ["Engine", "Masking", "Continuous Data", "Continuous Compliance", "Self-Service"],
-  },
-  helix: {
-    id: "helix",
-    name: "Helix",
-    tagline: "Version control & DevOps",
-    components: ["Core (P4D)", "Swarm", "TeamHub", "ALM", "DAM", "Proxy/Broker"],
+  "helix-core": {
+    id: "helix-core",
+    name: "Helix Core (P4)",
+    tagline: "Version control at scale",
+    components: ["P4D", "Swarm", "TeamHub", "Proxy", "Broker", "Helix4Git"],
   },
   perfecto: {
     id: "perfecto",
     name: "Perfecto",
     tagline: "Continuous testing cloud",
     components: ["Mobile Lab", "Web Lab", "Scriptless", "Smart Reporting", "CI Integrations"],
+  },
+  blazemeter: {
+    id: "blazemeter",
+    name: "BlazeMeter",
+    tagline: "Performance & API testing",
+    components: ["Load Engine", "API Functional", "Mock Services", "Reporting", "CI Integrations"],
+  },
+  delphix: {
+    id: "delphix",
+    name: "Delphix",
+    tagline: "Data masking & virtualization",
+    components: ["Engine", "Masking", "Continuous Data", "Continuous Compliance", "Self-Service"],
   },
 };
 
